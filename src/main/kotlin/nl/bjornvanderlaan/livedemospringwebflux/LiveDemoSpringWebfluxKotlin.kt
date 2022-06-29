@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class SpringWebfluxKotlinFunctionalApplication
+class LiveDemoSpringWebfluxKotlin
 
 fun main(args: Array<String>) {
-    runApplication<SpringWebfluxKotlinFunctionalApplication>(*args)
+    runApplication<LiveDemoSpringWebfluxKotlin>(*args)
 }

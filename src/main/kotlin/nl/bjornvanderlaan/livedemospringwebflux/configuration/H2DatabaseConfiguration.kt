@@ -1,7 +1,10 @@
 package nl.bjornvanderlaan.livedemospringwebflux.configuration
 
 import io.r2dbc.spi.ConnectionFactory
+import nl.bjornvanderlaan.livedemospringwebflux.model.Person
+import nl.bjornvanderlaan.livedemospringwebflux.repository.PersonRepository
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.ApplicationRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource
@@ -17,4 +20,10 @@ class H2DatabaseConfiguration {
         initializer.setDatabasePopulator(ResourceDatabasePopulator(ClassPathResource("migrations/V1__init.sql")))
         return initializer
     }
+
+    @Bean
+    fun insertData(personRepository: PersonRepository): ApplicationRunner =
+        ApplicationRunner {
+            personRepository.save(Person(name = "Kot Lin", age = 12)).block()
+        }
 }
