@@ -4,10 +4,9 @@ import com.ninjasquad.springmockk.MockkBean
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.mockk.every
 import io.mockk.slot
-import nl.bjornvanderlaan.livedemospringwebflux.model.Cat
-import nl.bjornvanderlaan.livedemospringwebflux.model.CatDto
-import nl.bjornvanderlaan.livedemospringwebflux.model.toEntity
+import nl.bjornvanderlaan.livedemospringwebflux.model.*
 import nl.bjornvanderlaan.livedemospringwebflux.repository.CatRepository
+import nl.bjornvanderlaan.livedemospringwebflux.repository.PersonRepository
 import nl.bjornvanderlaan.livedemospringwebflux.service.CatService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,6 +20,10 @@ class CatServiceTest {
 
     @MockkBean
     private lateinit var catRepository: CatRepository
+
+    @MockkBean
+    private lateinit var personRepository: PersonRepository
+
     @Autowired
     private lateinit var catService: CatService
 
@@ -49,6 +52,26 @@ class CatServiceTest {
             }
             .consumeNextWith { outputCat ->
                 outputCat shouldBeEqualToComparingFields secondCat
+            }
+            .verifyComplete()
+    }
+
+    @Test
+    fun `retrieve Cat with Owner`() {
+        val inputCat = Cat(id = 1, name = "Obi", type = "Dutch Ringtail", age = 3, ownerId = 1)
+        val inputPerson = Person(id = 1, name = "Peter Katlover", age = 29)
+
+        every {
+            catRepository.findById(1)
+        } returns Mono.just(inputCat)
+        every {
+            personRepository.findById(1)
+        } returns Mono.just(inputPerson)
+
+        StepVerifier
+            .create(catService.getCatById(1))
+            .consumeNextWith { outputCat ->
+                outputCat shouldBeEqualToComparingFields inputCat.toDto().copy(owner = inputPerson)
             }
             .verifyComplete()
     }
