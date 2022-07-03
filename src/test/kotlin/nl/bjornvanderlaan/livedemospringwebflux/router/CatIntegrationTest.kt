@@ -1,8 +1,8 @@
 package nl.bjornvanderlaan.livedemospringwebflux.router
 
+import kotlinx.coroutines.runBlocking
 import nl.bjornvanderlaan.livedemospringwebflux.model.Cat
-import nl.bjornvanderlaan.livedemospringwebflux.model.CatDto
-import nl.bjornvanderlaan.livedemospringwebflux.model.toDto
+import nl.bjornvanderlaan.livedemospringwebflux.repository.CatRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -49,9 +49,9 @@ class CatIntegrationTest(
         )
 
     @Test
-    fun `Retrieve all cats`() {
-        repository.save(aCat()).block()
-        repository.save(anotherCat()).block()
+    fun `Retrieve all cats`(): Unit = runBlocking {
+        repository.save(aCat())
+        repository.save(anotherCat())
 
         client
             .get()
@@ -60,7 +60,7 @@ class CatIntegrationTest(
             .exchange()
 
             .expectStatus().isOk
-            .expectBodyList<CatDto>().hasSize(2).contains(aCat().toDto(), anotherCat().toDto())
+            .expectBodyList<Cat>().hasSize(2).contains(aCat(), anotherCat())
     }
 
     @Test
@@ -75,6 +75,6 @@ class CatIntegrationTest(
             .exchange()
 
             .expectStatus().isOk
-            .expectBody<CatDto>().isEqualTo(aCat().toDto())
+            .expectBody<Cat>().isEqualTo(aCat())
     }
 }

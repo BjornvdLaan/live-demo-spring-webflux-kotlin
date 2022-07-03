@@ -1,7 +1,9 @@
 package nl.bjornvanderlaan.livedemospringwebflux.configuration
 
 import io.r2dbc.spi.ConnectionFactory
+import kotlinx.coroutines.runBlocking
 import nl.bjornvanderlaan.livedemospringwebflux.model.Person
+import nl.bjornvanderlaan.livedemospringwebflux.repository.PersonRepository
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.ApplicationRunner
 import org.springframework.context.annotation.Bean
@@ -23,6 +25,9 @@ class H2DatabaseConfiguration {
     @Bean
     fun insertData(personRepository: PersonRepository): ApplicationRunner =
         ApplicationRunner {
-            personRepository.save(Person(name = "Kot Lin", age = 12)).block()
+            runBlocking {
+                personRepository.save(Person(name = "Kot Lin", age = 12))
+            }
+
         }
 }

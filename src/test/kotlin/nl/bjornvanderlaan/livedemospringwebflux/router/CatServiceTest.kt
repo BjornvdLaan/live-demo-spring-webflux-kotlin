@@ -2,17 +2,21 @@ package nl.bjornvanderlaan.livedemospringwebflux.router
 
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
+import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.slot
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
 import nl.bjornvanderlaan.livedemospringwebflux.model.Cat
 import nl.bjornvanderlaan.livedemospringwebflux.model.CatDto
 import nl.bjornvanderlaan.livedemospringwebflux.model.toEntity
+import nl.bjornvanderlaan.livedemospringwebflux.repository.CatRepository
+import nl.bjornvanderlaan.livedemospringwebflux.service.CatService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
-import reactor.test.StepVerifier
 
 @SpringBootTest
 class CatServiceTest {
@@ -23,7 +27,7 @@ class CatServiceTest {
     private lateinit var catService: CatService
 
     @Test
-    fun `should retrieve all cats`() {
+    fun `should retrieve all cats`() = runBlocking {
         val firstCat = CatDto(
             name = "Obi",
             type = "Dutch Ringtail",
@@ -37,27 +41,24 @@ class CatServiceTest {
 
         every {
             catRepository.findAll()
-        } returns
-                Flux.just(firstCat.toEntity(), secondCat.toEntity())
+        } returns flow {
+            emit(firstCat.toEntity())
+            emit(secondCat.toEntity())
+        }
 
-        StepVerifier
-            .create(catService.getAllCats())
-            .consumeNextWith { outputCat ->
-                outputCat shouldBeEqualToComparingFields firstCat
-            }
-            .consumeNextWith { outputCat ->
-                outputCat shouldBeEqualToComparingFields secondCat
-            }
-            .verifyComplete()
+        val retrievedCats = catService.getAllCats().toList()
+
+        retrievedCats.count() shouldBe 2
+        retrievedCats[0] shouldBeEqualToComparingFields firstCat
     }
 
     @Test
-    fun `should add a new cat`() {
+    fun `should add a new cat`() = runBlocking {
         val catSlot = slot<Cat>()
-        every {
+        coEvery {
             catRepository.save(capture(catSlot))
         } coAnswers {
-            Mono.just(catSlot.captured)
+            catSlot.captured
         }
 
         val inputCat = CatDto(
@@ -65,12 +66,8 @@ class CatServiceTest {
             type = "Dutch Ringtail",
             age = 3
         )
+        val outputCat = catService.addNewCat(inputCat)
 
-        StepVerifier
-            .create(catService.addNewCat(inputCat))
-            .consumeNextWith { outputCat ->
-                inputCat shouldBeEqualToComparingFields outputCat
-            }
-            .verifyComplete()
+        outputCat shouldBeEqualToComparingFields inputCat
     }
 }
