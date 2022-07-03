@@ -22,16 +22,11 @@ class CatService(
 
     suspend fun getCatById(id: Long): CatDto? {
         val cat = catRepository.findById(id)
-        val owner = personService.getPersonById(id)
 
-        if (cat == null)
-            return null
-
-        return if (owner != null) {
+        return cat?.ownerId?.let {
+            val owner = personService.getPersonById(cat.ownerId)
             cat.toDto().copy(owner = owner)
-        } else {
-            cat.toDto()
-        }
+        } ?: cat?.toDto()
     }
 
     suspend fun addNewCat(cat: CatDto): CatDto =

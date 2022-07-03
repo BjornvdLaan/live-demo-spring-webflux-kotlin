@@ -3,6 +3,7 @@ package nl.bjornvanderlaan.livedemospringwebflux.router
 import nl.bjornvanderlaan.livedemospringwebflux.model.Cat
 import nl.bjornvanderlaan.livedemospringwebflux.model.CatDto
 import nl.bjornvanderlaan.livedemospringwebflux.model.toDto
+import nl.bjornvanderlaan.livedemospringwebflux.repository.CatRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
