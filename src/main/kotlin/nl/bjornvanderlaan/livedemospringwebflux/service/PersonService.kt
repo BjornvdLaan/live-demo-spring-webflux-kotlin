@@ -3,10 +3,9 @@ package nl.bjornvanderlaan.livedemospringwebflux.service
 import nl.bjornvanderlaan.livedemospringwebflux.model.Person
 import nl.bjornvanderlaan.livedemospringwebflux.repository.PersonRepository
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Mono
 
 @Service
 class PersonService(private val personRepository: PersonRepository) {
-    fun getPersonById(id: Long): Mono<Person> =
+    suspend fun getPersonById(id: Long): Person? =
         personRepository.findById(id)
 }

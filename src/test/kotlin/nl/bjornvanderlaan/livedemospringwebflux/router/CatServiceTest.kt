@@ -7,8 +7,6 @@ import io.mockk.slot
 import nl.bjornvanderlaan.livedemospringwebflux.model.Cat
 import nl.bjornvanderlaan.livedemospringwebflux.model.CatDto
 import nl.bjornvanderlaan.livedemospringwebflux.model.toEntity
-import nl.bjornvanderlaan.livedemospringwebflux.repository.CatRepository
-import nl.bjornvanderlaan.livedemospringwebflux.service.CatService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

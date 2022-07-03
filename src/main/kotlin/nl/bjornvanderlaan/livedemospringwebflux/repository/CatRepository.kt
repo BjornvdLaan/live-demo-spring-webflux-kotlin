@@ -1,16 +1,15 @@
 package nl.bjornvanderlaan.livedemospringwebflux.repository
 
+import kotlinx.coroutines.flow.Flow
 import nl.bjornvanderlaan.livedemospringwebflux.model.Cat
-import org.springframework.data.repository.reactive.ReactiveCrudRepository
+import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 
 @Repository
-interface CatRepository : ReactiveCrudRepository<Cat, Long> {
-    override fun findAll(): Flux<Cat>
-    override fun findById(id: Long): Mono<Cat>
-    override fun existsById(id: Long): Mono<Boolean>
-    override fun <S : Cat> save(entity: S): Mono<S>
-    override fun deleteById(id: Long): Mono<Void>
+interface CatRepository : CoroutineCrudRepository<Cat, Long> {
+    override fun findAll(): Flow<Cat>
+    override suspend fun findById(id: Long): Cat?
+    override suspend fun existsById(id: Long): Boolean
+    override suspend fun <S : Cat> save(entity: S): S
+    override suspend fun deleteById(id: Long)
 }

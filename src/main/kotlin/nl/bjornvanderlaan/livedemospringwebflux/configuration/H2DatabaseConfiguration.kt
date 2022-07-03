@@ -2,7 +2,6 @@ package nl.bjornvanderlaan.livedemospringwebflux.configuration
 
 import io.r2dbc.spi.ConnectionFactory
 import nl.bjornvanderlaan.livedemospringwebflux.model.Person
-import nl.bjornvanderlaan.livedemospringwebflux.repository.PersonRepository
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.ApplicationRunner
 import org.springframework.context.annotation.Bean
