@@ -3,7 +3,6 @@ package nl.bjornvanderlaan.livedemospringwebflux.service
 import nl.bjornvanderlaan.livedemospringwebflux.model.CatDto
 import nl.bjornvanderlaan.livedemospringwebflux.model.toDto
 import nl.bjornvanderlaan.livedemospringwebflux.model.toEntity
-import nl.bjornvanderlaan.livedemospringwebflux.repository.CatRepository
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
