@@ -19,10 +19,4 @@ class H2DatabaseConfiguration {
         initializer.setDatabasePopulator(ResourceDatabasePopulator(ClassPathResource("migrations/V1__init.sql")))
         return initializer
     }
-
-    @Bean
-    fun insertData(personRepository: PersonRepository): ApplicationRunner =
-        ApplicationRunner {
-            personRepository.save(Person(name = "Kot Lin", age = 12)).block()
-        }
 }
