@@ -1,1 +1,1 @@
-rootProject.name = "spring-webflux-kotlin-functional"
+rootProject.name = "live-demo-spring-webflux-kotlin"
