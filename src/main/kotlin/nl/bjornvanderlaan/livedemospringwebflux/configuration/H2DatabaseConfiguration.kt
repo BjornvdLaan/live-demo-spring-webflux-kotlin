@@ -24,10 +24,5 @@ class H2DatabaseConfiguration {
 
     @Bean
     fun insertData(personRepository: PersonRepository): ApplicationRunner =
-        ApplicationRunner {
-            runBlocking {
-                personRepository.save(Person(name = "Kot Lin", age = 12))
-            }
-
-        }
+        ApplicationRunner {}
 }
