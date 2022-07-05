@@ -34,6 +34,7 @@ class CatService(private val catRepository: CatRepository, private val personSer
     fun updateExistingCat(id: Long, updatedCat: CatDto) =
         catRepository
             .findById(id)
+            .switchIfEmpty(Mono.error(NoSuchElementException()))
             .flatMap { existingCat ->
                 catRepository.save(updatedCat.toEntity().copy(id = existingCat.id))
             }
